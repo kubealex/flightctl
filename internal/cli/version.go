@@ -66,10 +66,15 @@ func NewCmdVersion() *cobra.Command {
 }
 
 func (o *VersionOptions) Bind(fs *pflag.FlagSet) {
+	o.GlobalOptions.Bind(fs)
+
 	fs.StringVarP(&o.Output, "output", "o", o.Output, fmt.Sprintf("Output format. One of: (%s).", strings.Join(legalVersionOutputTypes, ", ")))
 }
 
 func (o *VersionOptions) Complete(cmd *cobra.Command, args []string) error {
+	if err := o.GlobalOptions.Complete(cmd, args); err != nil {
+		return err
+	}
 	return nil
 }
 
